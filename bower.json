@@ -15,6 +15,7 @@
     "index.html",
     "package.json",
     "mode/*/*test.js",
-    "mode/*/*.html"
+    "mode/*/*.html",
+    "CodeMirror"
   ]
 }
