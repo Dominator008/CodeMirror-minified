@@ -32,24 +32,11 @@
 
 var gulp = require('gulp');
 var foreach = require('gulp-foreach');
-var cleanCss = require('gulp-clean-css');
 var closureCompiler = require('google-closure-compiler').gulp();
+var cleanCss = require('gulp-clean-css');
 
 /** @const */
 var CM_ROOT = 'CodeMirror/';
-
-gulp.task('minify-css', function() {
-  return gulp.src([
-    CM_ROOT + 'addon/**/*.css',
-    CM_ROOT + 'lib/**/*.css',
-    CM_ROOT + 'mode/**/*.css',
-    CM_ROOT + 'theme/**/*.css'
-  ], {
-    base: CM_ROOT
-  })
-  .pipe(cleanCss())
-  .pipe(gulp.dest('.'));
-});
 
 gulp.task('minify-js', function() {
   return gulp.src([
@@ -74,6 +61,19 @@ gulp.task('minify-js', function() {
   .pipe(gulp.dest('.'));
 });
 
+gulp.task('minify-css', function() {
+  return gulp.src([
+    CM_ROOT + 'addon/**/*.css',
+    CM_ROOT + 'lib/**/*.css',
+    CM_ROOT + 'mode/**/*.css',
+    CM_ROOT + 'theme/**/*.css'
+  ], {
+    base: CM_ROOT
+  })
+  .pipe(cleanCss())
+  .pipe(gulp.dest('.'));
+});
+
 gulp.task('copy-authors', function() {
   return gulp.src([
     CM_ROOT + 'AUTHORS'
@@ -82,6 +82,6 @@ gulp.task('copy-authors', function() {
   }).pipe(gulp.dest('.'));
 });
 
-gulp.task('minify', ['minify-css', 'minify-js']);
+gulp.task('minify', ['minify-js', 'minify-css']);
 
 gulp.task('default', ['minify', 'copy-authors']);
