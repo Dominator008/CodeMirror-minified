@@ -35,34 +35,39 @@ var foreach = require('gulp-foreach');
 var cleanCss = require('gulp-clean-css');
 var closureCompiler = require('google-closure-compiler').gulp();
 
+/** @const */
+var CM_ROOT = 'CodeMirror/';
+
 gulp.task('minify-css', function() {
   return gulp.src([
-    'CodeMirror/addon/**/*.css',
-    'CodeMirror/lib/**/*.css',
-    'CodeMirror/mode/**/*.css',
-    'CodeMirror/theme/**/*.css',
-  ])
-  .pipe(foreach(function(stream, file) {
-    return stream
-      .pipe(cleanCss())
-      .pipe(gulp.dest(
-        file.path.replace('CodeMirror/', '').replace(file.relative, '')));
-  }));
+    CM_ROOT + 'addon/**/*.css',
+    CM_ROOT + 'lib/**/*.css',
+    CM_ROOT + 'mode/**/*.css',
+    CM_ROOT + 'theme/**/*.css'
+  ], {
+    base: CM_ROOT
+  })
+  .pipe(cleanCss())
+  .pipe(gulp.dest('.'));
 });
 
 gulp.task('minify-js', function() {
   return gulp.src([
-    'CodeMirror/addon/**/*.js',
-    'CodeMirror/keymap/**/*.js',
-    'CodeMirror/lib/**/*.js',
-    'CodeMirror/mode/**/*.js',
-  ])
+    CM_ROOT + 'addon/**/*.js',
+    CM_ROOT + 'keymap/**/*.js',
+    CM_ROOT + 'lib/**/*.js',
+    CM_ROOT + 'mode/**/*.js'
+  ], {
+    base: CM_ROOT
+  })
   .pipe(foreach(function(stream, file) {
+    // Travis kills a build if no log output for 10 minutes
+    console.log('Minifying ' + file.relative);
     return stream.pipe(closureCompiler({
       compilation_level: 'SIMPLE',
       language_in: 'ES6_STRICT',
       language_out: 'ES5_STRICT',
-      js_output_file: file.path.replace('CodeMirror/', ''),
+      js_output_file: file.relative,
       warning_level: 'QUIET'
     }));
   }))
