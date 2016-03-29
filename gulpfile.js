@@ -38,16 +38,8 @@ var cleanCss = require('gulp-clean-css');
 /** @const */
 var CM_ROOT = 'CodeMirror/';
 
-gulp.task('minify-js', function() {
-  return gulp.src([
-    CM_ROOT + 'addon/**/*.js',
-    CM_ROOT + 'keymap/**/*.js',
-    CM_ROOT + 'lib/**/*.js',
-    CM_ROOT + 'mode/**/*.js'
-  ], {
-    base: CM_ROOT
-  })
-  .pipe(foreach(function(stream, file) {
+function runForEach() {
+  return foreach(function(stream, file) {
     // Travis kills a build if no log output for 10 minutes
     console.log('Minifying ' + file.relative);
     return stream.pipe(closureCompiler({
@@ -57,7 +49,29 @@ gulp.task('minify-js', function() {
       js_output_file: file.relative,
       warning_level: 'QUIET'
     }));
-  }))
+  });
+}
+
+gulp.task('minify-js-main', function() {
+  return gulp.src([
+    CM_ROOT + 'addon/**/*.js',
+    CM_ROOT + 'keymap/**/*.js',
+    CM_ROOT + 'lib/**/*.js',
+  ], {
+    base: CM_ROOT
+  })
+  .pipe(runForEach())
+  .pipe(gulp.dest('.'));
+});
+
+gulp.task('minify-js-mode', function() {
+  return gulp.src([
+    CM_ROOT + 'mode/**/*.js',
+    '!' + CM_ROOT + 'mode/**/*test.js'
+  ], {
+    base: CM_ROOT
+  })
+  .pipe(runForEach())
   .pipe(gulp.dest('.'));
 });
 
@@ -82,6 +96,13 @@ gulp.task('copy-authors', function() {
   }).pipe(gulp.dest('.'));
 });
 
-gulp.task('minify', ['minify-js', 'minify-css']);
+gulp.task('minify', [
+  'minify-js-main',
+  'minify-js-mode',
+  'minify-css'
+]);
 
-gulp.task('default', ['minify', 'copy-authors']);
+gulp.task('default', [
+  'copy-authors',
+  'minify'
+]);
