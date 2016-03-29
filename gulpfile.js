@@ -74,6 +74,14 @@ gulp.task('minify-js', function() {
   .pipe(gulp.dest('.'));
 });
 
+gulp.task('copy-authors', function() {
+  return gulp.src([
+    CM_ROOT + 'AUTHORS'
+  ], {
+    base: CM_ROOT
+  }).pipe(gulp.dest('.'));
+});
+
 gulp.task('minify', ['minify-css', 'minify-js']);
 
-gulp.task('default', ['minify']);
+gulp.task('default', ['minify', 'copy-authors']);
