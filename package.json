@@ -1,0 +1,36 @@
+{
+  "name": "codemirror-minified",
+  "version":"5.13.2",
+  "main": "lib/codemirror.js",
+  "description": "Minified CodeMirror distribution",
+  "license": "MIT",
+  "directories": {
+    "lib": "./lib"
+  },
+  "devDependencies": {
+    "google-closure-compiler": 20160315.0.0
+  },
+  "bugs": "https://github.com/Dominator008/CodeMirror-minified/issues",
+  "keywords": [
+    "JavaScript",
+    "CodeMirror",
+    "Editor",
+    "minified"
+  ],
+  "homepage": "https://codemirror.net",
+  "maintainers":[
+    {
+      "name": "Michael Zhou",
+      "email": "zhoumotongxue008@gmail.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dominator008/CodeMirror-minified.git"
+  },
+  "jspm": {
+    "directories": {},
+    "dependencies": {},
+    "devDependencies": {}
+  }
+}
