@@ -17,6 +17,7 @@
     "package.json",
     "AUTHORS",
     "LICENSE",
+    "CHANGELOG.md",
     "README.md"
   ],
   "devDependencies": {
