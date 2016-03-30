@@ -21,7 +21,7 @@
     "README.md"
   ],
   "devDependencies": {
-    "google-closure-compiler": "20160315.0.0",
+    "google-closure-compiler": "^20160315.1.0",
     "gulp": "^3.9.1",
     "gulp-clean-css": "^2.0.4",
     "gulp-foreach": "^0.1.0"
