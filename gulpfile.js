@@ -93,7 +93,8 @@ gulp.task('copy-authors', function() {
     CM_ROOT + 'AUTHORS'
   ], {
     base: CM_ROOT
-  }).pipe(gulp.dest('.'));
+  })
+  .pipe(gulp.dest('.'));
 });
 
 gulp.task('minify', [

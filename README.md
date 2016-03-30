@@ -12,6 +12,7 @@ Just use this as if you are using the original CodeMirror library. All minified 
 ## Building it Yourself
 We use Gulp:
 ```
+git submodule update --init
 npm install
 gulp
 ```
