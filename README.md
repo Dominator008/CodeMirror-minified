@@ -7,7 +7,7 @@ This is a minified [CodeMirror](https://codemirror.net) distribution. All JavaSc
 This distribution contains only the `addon`, `keymap`, `lib`, `mode` and `theme` directories. Within them, only non-test JavaScript and CSS files are included. See the ["file"](https://github.com/Dominator008/CodeMirror-minified/blob/master/package.json#L10-L22) section in `package.json` for the list of things included.
 
 ## Instructions
-Just use this as if you are using the original CodeMirror library. All minified files retain their original name and location relative to CodeMirror's project root directory.
+Just use this as if you were using the original CodeMirror library. All minified files retain their original name and location relative to CodeMirror's project root directory.
 
 ## Building it Yourself
 We use Gulp:
