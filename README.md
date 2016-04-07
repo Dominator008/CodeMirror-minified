@@ -9,9 +9,14 @@ This distribution contains only the `addon`, `keymap`, `lib`, `mode` and `theme`
 ## Instructions
 Just use this as if you were using the original CodeMirror library. All minified files retain their original name and location relative to CodeMirror's project root directory.
 
+An NPM package is available at https://www.npmjs.com/package/codemirror-minified. Install with:
+```sh
+npm install codemirror-minified
+```
+
 ## Building it Yourself
 We use Gulp:
-```
+```sh
 git submodule update --init
 npm install
 gulp
