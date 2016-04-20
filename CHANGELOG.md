@@ -1,3 +1,13 @@
+## 5.14.2 (2016-04-20)
+
+### Bugfixes
+
+Push a new package to NPM due to an [NPM bug](https://github.com/npm/npm/issues/5082) omitting the LICENSE file in 5.14.0.
+
+Set `dataTransfer.effectAllowed` in `dragstart` handler to help browsers use the right drag icon.
+
+Add the [mbox mode](http://codemirror.net/mode/mbox/index.html) to `mode/meta.js`.
+
 ## 5.14.0 (2016-04-20)
 
 ### Bugfixes
@@ -6,7 +16,7 @@
 
 [vim bindings](http://codemirror.net/demo/vim.html): Only call `.save()` when it is actually available.
 
-[commend addon](http://codemirror.net/doc/manual.html#addon_comment): Be careful not to mangle multi-line strings.
+[comment addon](http://codemirror.net/doc/manual.html#addon_comment): Be careful not to mangle multi-line strings.
 
 [Python mode](http://codemirror.net/mode/python/index.html): Improve distinguishing of decorators from `@` operators.
 
@@ -522,9 +532,9 @@ Integrate some bugfixes, enhancements to the vim keymap, and new modes ([D](http
 
 *   New mode: [Common Lisp](http://codemirror.net/mode/commonlisp/index.html).
 *   Fix right-click select-all on most browsers.
-*   Change the way highlighting happens:  
-      Saves memory and CPU cycles.  
-      `compareStates` is no longer needed.  
+*   Change the way highlighting happens:
+      Saves memory and CPU cycles.
+      `compareStates` is no longer needed.
       `onHighlightComplete` no longer works.
 *   Integrate mode (Markdown, XQuery, CSS, sTex) tests in central testsuite.
 *   Add a [`CodeMirror.version`](http://codemirror.net/doc/manual.html#version) property.
