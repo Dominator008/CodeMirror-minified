@@ -1,6 +1,6 @@
 {
   "name": "codemirror-minified",
-  "version":"5.15.2",
+  "version":"5.16.0",
   "main": "lib/codemirror.js",
   "description": "Minified CodeMirror distribution",
   "license": "MIT",
@@ -23,8 +23,8 @@
   "devDependencies": {
     "google-closure-compiler": "^20160517.1.0",
     "gulp": "^3.9.1",
-    "gulp-clean-css": "^2.0.7",
-    "gulp-foreach": "^0.1.0"
+    "gulp-clean-css": "^2.0.10",
+    "gulp-flatmap": "^1.0.0"
   },
   "bugs": "https://github.com/Dominator008/CodeMirror-minified/issues",
   "keywords": [

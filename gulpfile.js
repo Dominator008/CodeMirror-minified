@@ -31,15 +31,15 @@
 'use strict';
 
 var gulp = require('gulp');
-var foreach = require('gulp-foreach');
+var flatmap = require('gulp-flatmap');
 var closureCompiler = require('google-closure-compiler').gulp();
 var cleanCss = require('gulp-clean-css');
 
 /** @const */
 var CM_ROOT = 'CodeMirror/';
 
-function runForEach() {
-  return foreach(function(stream, file) {
+function runFlatMap() {
+  return flatmap(function(stream, file) {
     // Travis kills a build if no log output for 10 minutes
     console.log('Minifying ' + file.relative);
     return stream.pipe(closureCompiler({
@@ -60,7 +60,7 @@ gulp.task('minify-js-main', function() {
   ], {
     base: CM_ROOT
   })
-  .pipe(runForEach())
+  .pipe(runFlatMap())
   .pipe(gulp.dest('.'));
 });
 
@@ -71,7 +71,7 @@ gulp.task('minify-js-mode', function() {
   ], {
     base: CM_ROOT
   })
-  .pipe(runForEach())
+  .pipe(runFlatMap())
   .pipe(gulp.dest('.'));
 });
 
