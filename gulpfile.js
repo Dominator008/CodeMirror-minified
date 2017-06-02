@@ -30,52 +30,52 @@
 
 'use strict';
 
-var gulp = require('gulp');
-var flatmap = require('gulp-flatmap');
-var closureCompiler = require('google-closure-compiler').gulp();
-var cleanCss = require('gulp-clean-css');
+const gulp = require('gulp');
+const flatmap = require('gulp-flatmap');
+const closureCompiler = require('google-closure-compiler').gulp();
+const cleanCss = require('gulp-clean-css');
 
-/** @const */
-var CM_ROOT = 'CodeMirror/';
+const CM_ROOT = 'CodeMirror/';
 
 function runFlatMap() {
-  return flatmap(function(stream, file) {
+  return flatmap((stream, file) => {
+    const pathAtCmRoot = file.relative.replace(CM_ROOT, '');
     // Travis kills a build if no log output for 10 minutes
-    console.log('Minifying ' + file.relative);
+    console.log('Minifying ' + pathAtCmRoot);
     return stream.pipe(closureCompiler({
       compilation_level: 'SIMPLE',
       language_in: 'ES6_STRICT',
       language_out: 'ES5_STRICT',
-      js_output_file: file.relative,
+      js_output_file: pathAtCmRoot,
       warning_level: 'QUIET'
     }));
   });
 }
 
-gulp.task('minify-js-main', function() {
+gulp.task('minify-js-main', () => {
   return gulp.src([
     CM_ROOT + 'addon/**/*.js',
     CM_ROOT + 'keymap/**/*.js',
     CM_ROOT + 'lib/**/*.js',
   ], {
-    base: CM_ROOT
+    base: '.'
   })
   .pipe(runFlatMap())
   .pipe(gulp.dest('.'));
 });
 
-gulp.task('minify-js-mode', function() {
+gulp.task('minify-js-mode', () => {
   return gulp.src([
     CM_ROOT + 'mode/**/*.js',
     '!' + CM_ROOT + 'mode/**/*test.js'
   ], {
-    base: CM_ROOT
+    base: '.'
   })
   .pipe(runFlatMap())
   .pipe(gulp.dest('.'));
 });
 
-gulp.task('minify-css', function() {
+gulp.task('minify-css', () => {
   return gulp.src([
     CM_ROOT + 'addon/**/*.css',
     CM_ROOT + 'lib/**/*.css',
@@ -88,7 +88,7 @@ gulp.task('minify-css', function() {
   .pipe(gulp.dest('.'));
 });
 
-gulp.task('copy-textfiles', function() {
+gulp.task('copy-textfiles', () => {
   return gulp.src([
     CM_ROOT + 'AUTHORS',
     CM_ROOT + 'CHANGELOG.md'
