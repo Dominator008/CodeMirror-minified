@@ -21,9 +21,9 @@
     "README.md"
   ],
   "devDependencies": {
-    "google-closure-compiler": "^20180402.0.0",
-    "gulp": "^3.9.1",
-    "gulp-clean-css": "^3.9.4",
+    "google-closure-compiler": "^20190121.0.0",
+    "gulp": "^4.0.0",
+    "gulp-clean-css": "^4.0.0",
     "gulp-flatmap": "^1.0.2"
   },
   "bugs": "https://github.com/Dominator008/CodeMirror-minified/issues",

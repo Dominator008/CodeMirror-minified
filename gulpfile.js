@@ -30,7 +30,7 @@
 
 'use strict';
 
-const gulp = require('gulp');
+const {series, parallel, src, dest} = require('gulp');
 const flatmap = require('gulp-flatmap');
 const closureCompiler = require('google-closure-compiler').gulp();
 const cleanCss = require('gulp-clean-css');
@@ -44,67 +44,48 @@ function runFlatMap() {
     console.log('Minifying ' + pathAtCmRoot);
     return stream.pipe(closureCompiler({
       compilation_level: 'SIMPLE',
-      language_in: 'ES6_STRICT',
-      language_out: 'ES5_STRICT',
+      language_in: 'STABLE',
+      language_out: 'ECMASCRIPT5_STRICT',
       js_output_file: pathAtCmRoot,
       warning_level: 'QUIET'
     }));
   });
 }
 
-gulp.task('minify-js-main', () => {
-  return gulp.src([
-    CM_ROOT + 'addon/**/*.js',
-    CM_ROOT + 'keymap/**/*.js',
-    CM_ROOT + 'lib/**/*.js',
-  ], {
-    base: '.'
-  })
-  .pipe(runFlatMap())
-  .pipe(gulp.dest('.'));
-});
+function minifyMainJs() {
+  return src(
+             [
+               CM_ROOT + 'addon/**/*.js',
+               CM_ROOT + 'keymap/**/*.js',
+               CM_ROOT + 'lib/**/*.js',
+             ],
+             {base: '.'})
+      .pipe(runFlatMap())
+      .pipe(dest('.'));
+}
 
-gulp.task('minify-js-mode', () => {
-  return gulp.src([
-    CM_ROOT + 'mode/**/*.js',
-    '!' + CM_ROOT + 'mode/**/*test.js'
-  ], {
-    base: '.'
-  })
-  .pipe(runFlatMap())
-  .pipe(gulp.dest('.'));
-});
+function minifyModesJs() {
+  return src([CM_ROOT + 'mode/**/*.js', '!' + CM_ROOT + 'mode/**/*test.js'],
+             {base: '.'})
+      .pipe(runFlatMap())
+      .pipe(dest('.'));
+}
 
-gulp.task('minify-css', () => {
-  return gulp.src([
-    CM_ROOT + 'addon/**/*.css',
-    CM_ROOT + 'lib/**/*.css',
-    CM_ROOT + 'mode/**/*.css',
-    CM_ROOT + 'theme/**/*.css'
-  ], {
-    base: CM_ROOT
-  })
-  .pipe(cleanCss())
-  .pipe(gulp.dest('.'));
-});
+function minifyCss() {
+  return src(
+             [
+               CM_ROOT + 'addon/**/*.css', CM_ROOT + 'lib/**/*.css',
+               CM_ROOT + 'mode/**/*.css', CM_ROOT + 'theme/**/*.css'
+             ],
+             {base: CM_ROOT})
+      .pipe(cleanCss())
+      .pipe(dest('.'));
+}
 
-gulp.task('copy-textfiles', () => {
-  return gulp.src([
-    CM_ROOT + 'AUTHORS',
-    CM_ROOT + 'CHANGELOG.md'
-  ], {
-    base: CM_ROOT
-  })
-  .pipe(gulp.dest('.'));
-});
+function copyTextFiles() {
+  return src([CM_ROOT + 'AUTHORS', CM_ROOT + 'CHANGELOG.md'], {base: CM_ROOT})
+      .pipe(dest('.'));
+}
 
-gulp.task('minify', [
-  'minify-js-main',
-  'minify-js-mode',
-  'minify-css'
-]);
-
-gulp.task('default', [
-  'copy-textfiles',
-  'minify'
-]);
+exports.minify = parallel(minifyMainJs, minifyModesJs, minifyCss);
+exports.default = series(copyTextFiles, exports.minify);
