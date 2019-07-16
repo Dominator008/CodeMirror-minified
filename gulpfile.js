@@ -30,7 +30,8 @@
 
 'use strict';
 
-const {series, parallel, src, dest} = require('gulp');
+const { series, parallel, src, dest } = require('gulp');
+const concat = require('gulp-concat');
 const flatmap = require('gulp-flatmap');
 const closureCompiler = require('google-closure-compiler').gulp();
 const cleanCss = require('gulp-clean-css');
@@ -42,50 +43,70 @@ function runFlatMap() {
     const pathAtCmRoot = file.relative.replace(CM_ROOT, '');
     // Travis kills a build if no log output for 10 minutes
     console.log('Minifying ' + pathAtCmRoot);
-    return stream.pipe(closureCompiler({
-      compilation_level: 'SIMPLE',
-      language_in: 'STABLE',
-      language_out: 'ECMASCRIPT5_STRICT',
-      js_output_file: pathAtCmRoot,
-      warning_level: 'QUIET'
-    }));
+    return stream.pipe(
+      closureCompiler({
+        compilation_level: 'SIMPLE',
+        language_in: 'STABLE',
+        language_out: 'ECMASCRIPT5_STRICT',
+        js_output_file: pathAtCmRoot,
+        warning_level: 'QUIET'
+      })
+    );
   });
 }
 
-function minifyMainJs() {
+function minifyMainJS() {
   return src(
-             [
-               CM_ROOT + 'addon/**/*.js',
-               CM_ROOT + 'keymap/**/*.js',
-               CM_ROOT + 'lib/**/*.js',
-             ],
-             {base: '.'})
-      .pipe(runFlatMap())
-      .pipe(dest('.'));
+    [
+      CM_ROOT + 'addon/**/*.js',
+      CM_ROOT + 'keymap/**/*.js',
+      CM_ROOT + 'lib/**/*.js'
+    ],
+    { base: '.' }
+  )
+    .pipe(runFlatMap())
+    .pipe(dest('.'));
 }
 
-function minifyModesJs() {
-  return src([CM_ROOT + 'mode/**/*.js', '!' + CM_ROOT + 'mode/**/*test.js'],
-             {base: '.'})
-      .pipe(runFlatMap())
-      .pipe(dest('.'));
+function minifyModesJS() {
+  return src([CM_ROOT + 'mode/**/*.js', '!' + CM_ROOT + 'mode/**/*test.js'], {
+    base: '.'
+  })
+    .pipe(runFlatMap())
+    .pipe(dest('.'));
 }
 
 function minifyCss() {
   return src(
-             [
-               CM_ROOT + 'addon/**/*.css', CM_ROOT + 'lib/**/*.css',
-               CM_ROOT + 'mode/**/*.css', CM_ROOT + 'theme/**/*.css'
-             ],
-             {base: CM_ROOT})
-      .pipe(cleanCss())
-      .pipe(dest('.'));
+    [
+      CM_ROOT + 'addon/**/*.css',
+      CM_ROOT + 'lib/**/*.css',
+      CM_ROOT + 'mode/**/*.css',
+      CM_ROOT + 'theme/**/*.css'
+    ],
+    { base: CM_ROOT }
+  )
+    .pipe(cleanCss())
+    .pipe(dest('.'));
 }
 
 function copyTextFiles() {
-  return src([CM_ROOT + 'AUTHORS', CM_ROOT + 'CHANGELOG.md'], {base: CM_ROOT})
-      .pipe(dest('.'));
+  return src([CM_ROOT + 'AUTHORS', CM_ROOT + 'CHANGELOG.md'], {
+    base: CM_ROOT
+  }).pipe(dest('.'));
 }
 
-exports.minify = parallel(minifyMainJs, minifyModesJs, minifyCss);
+function concatMinifiedJS() {
+  return src(
+    ['lib/codemirror.js', 'addon/**/*.js', 'keymap/**/*.js', 'mode/**/*.js'],
+    {
+      base: CM_ROOT
+    }
+  )
+    .pipe(concat('codemirror-bundled.js'))
+    .pipe(dest('lib/'));
+}
+
+exports.minify = parallel(minifyMainJS, minifyModesJS, minifyCss);
+exports.bundle = concatMinifiedJS;
 exports.default = series(copyTextFiles, exports.minify);
