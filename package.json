@@ -1,6 +1,6 @@
 {
   "name": "codemirror-minified",
-  "version": "5.63.1",
+  "version": "5.63.3",
   "main": "lib/codemirror.js",
   "description": "Minified CodeMirror distribution",
   "license": "MIT",
